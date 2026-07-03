@@ -1,6 +1,6 @@
 PLAY NFT 🎨
 
-Live At : 
+Live At : https://buildbyaditya.github.io/PLAY-NFT/
 
 
 PLAY NFT is a beautifully designed, multi-page digital marketplace for crypto collectibles and non-fungible tokens (NFTs). It allows users to discover, collect, and sell digital art.
