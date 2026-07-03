@@ -1,0 +1,522 @@
+/* --- General Setup & Variables --- */
+:root {
+    --bg-color: #0c0a1a;
+    --dark-blue-bg: #1a0f3d;
+    --primary-gradient: linear-gradient(90deg, rgba(82,48,168,1) 0%, rgba(162,71,255,1) 100%);
+    --secondary-bg-color: rgba(255, 255, 255, 0.05);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-primary: #ffffff;
+    --text-secondary: #a9a5c4;
+    --font-family: 'Poppins', sans-serif;
+    --glass-blur: 15px;
+    --hover-glow-color: rgba(162, 71, 255, 0.6);
+    --input-focus-border: rgba(162, 71, 255, 0.5);
+}
+
+/* --- Base Styles --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(180deg, var(--bg-color) 0%, var(--dark-blue-bg) 100%);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    min-height: 100vh;
+    line-height: 1.6;
+    padding-top: 90px; /* Add padding to prevent content from hiding behind the fixed navbar */
+}
+
+/* --- Navbar --- */
+.navbar {
+    position: fixed; /* Changed from absolute to fixed */
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 5%;
+    background: rgba(12, 10, 26, 0.6); /* Semi-transparent background */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 100;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+}
+
+.nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    padding-bottom: 5px;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--text-primary);
+}
+
+.nav-links a .hover-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 0;
+    background: var(--primary-gradient);
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover .hover-underline {
+    width: 100%;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--secondary-bg-color);
+    border-radius: 30px;
+    padding: 5px 15px;
+    border: 1px solid var(--border-color);
+}
+
+.search-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    opacity: 0.6;
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 1rem;
+    width: 150px; /* Initial width */
+    transition: width 0.3s ease;
+}
+
+.search-bar input::placeholder {
+    color: var(--text-secondary);
+}
+
+.search-bar input:focus {
+    width: 200px; /* Expand on focus */
+}
+
+.gradient-border-glow {
+    position: relative;
+}
+
+.gradient-border-glow::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px; right: -1px; bottom: -1px;
+    background: var(--primary-gradient);
+    filter: blur(5px);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: inherit; /* Match parent's border-radius */
+}
+
+.gradient-border-glow:hover::before {
+    opacity: 0.7;
+}
+
+
+/* --- Page Layout --- */
+.auth-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    padding-top: 0; /* Remove top padding as it's now on the body */
+    animation: fadeIn 1s ease-out;
+}
+
+.auth-navbar {
+    /* This class is no longer used, but we'll leave it for reference or remove it */
+    display: none;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.auth-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 450px;
+    margin-top: 0; /* Removed margin-top */
+}
+
+/* --- Glassmorphism & Glow Effects --- */
+.glassmorphism {
+    background: var(--secondary-bg-color);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-radius: 25px;
+}
+
+.card-glow {
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transition: box-shadow 0.3s ease;
+}
+
+.card-glow:hover {
+     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* --- Auth Card --- */
+.auth-card {
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.auth-card h2 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+}
+
+/* --- Form Toggle Switch --- */
+.auth-radio-input {
+    display: none; /* Hide the actual radio buttons */
+}
+
+.auth-toggle {
+    display: flex;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 30px;
+    padding: 5px;
+    margin-bottom: 20px;
+    position: relative;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid var(--border-color);
+}
+
+.auth-toggle .toggle-btn {
+    padding: 10px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    font-weight: 500;
+    color: var(--text-secondary);
+    position: relative;
+    z-index: 2;
+}
+
+/* Style the label text when its corresponding radio is checked */
+#login-radio:checked + #register-radio + .auth-toggle .toggle-btn[for="login-radio"],
+#register-radio:checked + .auth-toggle .toggle-btn[for="register-radio"] {
+    color: var(--text-primary);
+}
+
+.auth-toggle .toggle-indicator {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    height: calc(100% - 10px);
+    width: calc(50% - 5px);
+    background: var(--primary-gradient);
+    border-radius: 25px;
+    transition: left 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 1;
+}
+
+#register-radio:checked ~ .auth-toggle .toggle-indicator {
+    left: 50%;
+}
+
+
+/* --- Form Switching Animation --- */
+.auth-forms {
+    position: relative;
+    height: 528px; /* Increased height slightly for better spacing */
+    overflow: hidden;
+}
+
+.auth-form {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+/* State when Login is selected */
+#login-radio:checked ~ .auth-forms .login-form {
+    opacity: 1;
+    transform: translateX(0);
+    z-index: 1;
+}
+#login-radio:checked ~ .auth-forms .register-form {
+    opacity: 0;
+    transform: translateX(100%);
+    z-index: 0;
+}
+
+/* State when Register is selected (DEFAULT) */
+#register-radio:checked ~ .auth-forms .login-form {
+    opacity: 0;
+    transform: translateX(-100%);
+    z-index: 0;
+}
+#register-radio:checked ~ .auth-forms .register-form {
+    opacity: 1;
+    transform: translateX(0);
+    z-index: 1;
+}
+
+
+/* --- Input Fields & Floating Labels --- */
+.input-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 10px var(--input-focus-border);
+}
+
+.input-group label {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -10px;
+    left: 10px;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    background: var(--dark-blue-bg);
+    padding: 0 5px;
+}
+
+/* --- Form Options & Custom Checkbox --- */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+}
+
+.forgot-password {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.forgot-password:hover {
+    color: var(--text-primary);
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    font-size: 0.9rem;
+    user-select: none;
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+    text-align: left;
+}
+.checkbox-container:hover {
+    color: var(--text-primary);
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.checkbox-container:hover .checkmark {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.checkbox-container input:checked + .checkmark {
+    background-image: var(--primary-gradient);
+    border-color: transparent;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.terms-checkbox {
+    margin-bottom: 25px;
+}
+
+.terms-checkbox a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+/* --- Buttons --- */
+.btn {
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    outline: none;
+}
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    color: var(--text-primary);
+}
+.btn-primary:hover {
+    box-shadow: 0 5px 15px rgba(162,71,255,0.4);
+}
+
+.auth-submit-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+}
+
+/* --- Dividers & Social Login --- */
+.or-divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0;
+    color: var(--text-secondary);
+}
+.or-divider::before, .or-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+}
+.or-divider span {
+    padding: 0 1em;
+}
+
+.social-login {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.social-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+.social-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* --- General Animations --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+

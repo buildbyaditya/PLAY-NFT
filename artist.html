@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artists - PLAY NFT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- General Setup & Variables --- */
+        :root {
+            --bg-color: #0c0a1a;
+            --dark-blue-bg: #1a0f3d;
+            --primary-gradient: linear-gradient(90deg, rgba(82,48,168,1) 0%, rgba(162,71,255,1) 100%);
+            --secondary-gradient: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --secondary-bg-color: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a9a5c4;
+            --font-family: 'Poppins', sans-serif;
+            --glass-blur: 15px;
+            --hover-glow-color: rgba(162, 71, 255, 0.6);
+            --input-focus-border: rgba(162, 71, 255, 0.5);
+        }
+
+        /* --- Base Styles --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--bg-color) 0%, var(--dark-blue-bg) 100%);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            min-height: 100vh;
+            line-height: 1.6;
+            padding-top: 80px; /* Add padding to prevent content from hiding behind the fixed navbar */
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 5%;
+            background: rgba(12, 10, 26, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; position: relative; padding-bottom: 5px; transition: color 0.3s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-primary); }
+        .nav-links a .hover-underline { position: absolute; bottom: 0; left: 0; height: 2px; width: 0; background: var(--primary-gradient); transition: width 0.3s ease; }
+        .nav-links a:hover .hover-underline, .nav-links a.active .hover-underline { width: 100%; }
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
+
+        .search-bar { position: relative; display: flex; align-items: center; background: var(--secondary-bg-color); border-radius: 30px; padding: 5px 15px; border: 1px solid var(--border-color); }
+        .search-icon { width: 18px; height: 18px; margin-right: 10px; opacity: 0.6; }
+        .search-bar input { background: transparent; border: none; outline: none; color: var(--text-primary); font-size: 1rem; width: 150px; transition: width 0.3s ease; }
+        .search-bar input::placeholder { color: var(--text-secondary); }
+        .search-bar input:focus { width: 200px; }
+        .gradient-border-glow { position: relative; }
+        .gradient-border-glow::before { content: ''; position: absolute; top: -1px; left: -1px; right: -1px; bottom: -1px; background: var(--primary-gradient); filter: blur(5px); z-index: -1; opacity: 0; transition: opacity 0.3s ease; border-radius: inherit; }
+        .gradient-border-glow:hover::before { opacity: 0.7; }
+
+        /* --- Page Layout --- */
+        .page-wrapper { display: flex; flex-direction: column; align-items: center; min-height: calc(100vh - 80px); padding: 40px 5%; animation: fadeIn 1s ease-out; }
+        .logo { font-size: 1.5rem; font-weight: 700; text-decoration: none; color: var(--text-primary); }
+        
+        /* --- Glassmorphism & Glow Effects --- */
+        .glassmorphism { background: var(--secondary-bg-color); border: 1px solid var(--border-color); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border-radius: 25px; }
+        .card-glow { position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); transition: box-shadow 0.3s ease, transform 0.3s ease; }
+        .card-glow:hover { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); transform: translateY(-5px); }
+
+        /* --- Buttons --- */
+        .btn { padding: 12px 28px; border-radius: 30px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; border: none; outline: none; }
+        .btn:hover { transform: translateY(-3px); }
+        .btn-primary { background: var(--primary-gradient); color: var(--text-primary); }
+        .btn-primary:hover { box-shadow: 0 5px 15px rgba(162,71,255,0.4); }
+        .btn.btn-secondary { background: var(--secondary-gradient); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 20px; font-size: 0.9rem; }
+        .btn.btn-secondary:hover { background: rgba(255, 255, 255, 0.15); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        /* --- General Animations --- */
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* ========================================= */
+        /* --- STYLES FOR ARTISTS PAGE --- */
+        /* ========================================= */
+        .artists-content { width: 100%; max-width: 1400px; }
+
+        .page-header {
+            width: 100%;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .artists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        /* --- Artist Card --- */
+        .artist-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 25px;
+            text-align: center;
+        }
+
+        .artist-banner {
+            width: 100%;
+            height: 120px;
+            border-radius: 25px 25px 0 0;
+            overflow: hidden;
+        }
+        
+        .artist-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .artist-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid var(--dark-blue-bg);
+            margin-top: -50px; /* Pulls avatar up over the banner */
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .artist-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .artist-info {
+            margin-top: 15px;
+        }
+
+        .artist-info h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .artist-info p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .artist-stats {
+            display: flex;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item strong {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .stat-item span {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .artist-card .btn {
+            margin-top: auto; /* Pushes button to bottom if card height varies */
+            width: 80%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container"> <a href="index.html" class="logo">PLAY NFT</a> <nav class="nav-links"> <a href="index.html">Home<span class="hover-underline"></span></a> <a href="explore.html">Explore<span class="hover-underline"></span></a> <a href="market.html">Marketplace<span class="hover-underline"></span></a> <a href="artist.html" class="active">Artists<span class="hover-underline"></span></a> <a href="news.html">News<span class="hover-underline"></span></a> </nav> <div class="nav-actions"> <div class="search-bar gradient-border-glow"> <img src="search.png" alt="Search Icon" class="search-icon"> <input type="text" placeholder="Search"> </div> <button class="btn btn-primary gradient-border-glow"><a href="auth.html" style="text-decoration: none; color: white;">Register</a></button> </div> </div>
+    </header>
+
+    <div class="page-wrapper">
+        <main class="artists-content">
+            <section class="page-header glassmorphism">
+                <h1>Meet Our Creators</h1>
+                <p>Explore the profiles of the talented artists and visionaries shaping the future of digital art.</p>
+            </section>
+
+            <section class="artists-grid">
+                <!-- Artist 1 -->
+                <div class="artist-card glassmorphism card-glow">
+                    <div class="artist-banner"><img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1000&auto=format&fit=crop" alt="Artist Banner"></div>
+                    <div class="artist-avatar"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=580&auto=format&fit=crop" alt="Artist Avatar"></div>
+                    <div class="artist-info">
+                        <h3>Neuroartist</h3>
+                        <p>@neuroartist</p>
+                    </div>
+                    <div class="artist-stats">
+                        <div class="stat-item"><strong>1.2M</strong><span>Followers</span></div>
+                        <div class="stat-item"><strong>128</strong><span>Artworks</span></div>
+                    </div>
+                    <button class="btn btn-secondary">Follow</button>
+                </div>
+                <!-- Artist 2 -->
+                <div class="artist-card glassmorphism card-glow">
+                    <div class="artist-banner"><img src="https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=829&auto=format&fit=crop" alt="Artist Banner"></div>
+                    <div class="artist-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=387&auto=format&fit=crop" alt="Artist Avatar"></div>
+                    <div class="artist-info">
+                        <h3>Render God</h3>
+                        <p>@render_god</p>
+                    </div>
+                    <div class="artist-stats">
+                        <div class="stat-item"><strong>980K</strong><span>Followers</span></div>
+                        <div class="stat-item"><strong>94</strong><span>Artworks</span></div>
+                    </div>
+                    <button class="btn btn-secondary">Follow</button>
+                </div>
+                <!-- Artist 3 -->
+                <div class="artist-card glassmorphism card-glow">
+                    <div class="artist-banner"><img src="https://images.unsplash.com/photo-1554034483-04fda0d3507b?q=80&w=870&auto=format&fit=crop" alt="Artist Banner"></div>
+                    <div class="artist-avatar"><img src="https://images.unsplash.com/photo-1628157588553-5eeea00af15c?q=80&w=580&auto=format&fit=crop" alt="Artist Avatar"></div>
+                    <div class="artist-info">
+                        <h3>Digi Gems</h3>
+                        <p>@digi_gems</p>
+                    </div>
+                    <div class="artist-stats">
+                        <div class="stat-item"><strong>750K</strong><span>Followers</span></div>
+                        <div class="stat-item"><strong>210</strong><span>Artworks</span></div>
+                    </div>
+                    <button class="btn btn-secondary">Follow</button>
+                </div>
+                <!-- Artist 4 -->
+                <div class="artist-card glassmorphism card-glow">
+                    <div class="artist-banner"><img src="https://images.unsplash.com/photo-1557682224-5b8590cd9ec5?q=80&w=928&auto=format&fit=crop" alt="Artist Banner"></div>
+                    <div class="artist-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=387&auto=format&fit=crop" alt="Artist Avatar"></div>
+                    <div class="artist-info">
+                        <h3>Future Visions</h3>
+                        <p>@future_visions</p>
+                    </div>
+                    <div class="artist-stats">
+                        <div class="stat-item"><strong>2.5M</strong><span>Followers</span></div>
+                        <div class="stat-item"><strong>55</strong><span>Artworks</span></div>
+                    </div>
+                    <button class="btn btn-secondary">Follow</button>
+                </div>
+                <!-- Artist 5 -->
+                <div class="artist-card glassmorphism card-glow">
+                    <div class="artist-banner"><img src="https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=829&auto=format&fit=crop" alt="Artist Banner"></div>
+                    <div class="artist-avatar"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=388&auto=format&fit=crop" alt="Artist Avatar"></div>
+                    <div class="artist-info">
+                        <h3>Colorflow</h3>
+                        <p>@colorflow</p>
+                    </div>
+                    <div class="artist-stats">
+                        <div class="stat-item"><strong>812K</strong><span>Followers</span></div>
+                        <div class="stat-item"><strong>300+</strong><span>Artworks</span></div>
+                    </div>
+                    <button class="btn btn-secondary">Follow</button>
+                </div>
+                <!-- Artist 6 -->
+                <div class="artist-card glassmorphism card-glow">
+                    <div class="artist-banner"><img src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=987&auto=format&fit=crop" alt="Artist Banner"></div>
+                    <div class="artist-avatar"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=387&auto=format&fit=crop" alt="Artist Avatar"></div>
+                    <div class="artist-info">
+                        <h3>Sky Painter</h3>
+                        <p>@sky_painter</p>
+                    </div>
+                    <div class="artist-stats">
+                        <div class="stat-item"><strong>630K</strong><span>Followers</span></div>
+                        <div class="stat-item"><strong>88</strong><span>Artworks</span></div>
+                    </div>
+                    <button class="btn btn-secondary">Follow</button>
+                </div>
+                 <!-- Artist 7 -->
+                 <div class="artist-card glassmorphism card-glow">
+                    <div class="artist-banner"><img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=870&auto=format&fit=crop" alt="Artist Banner"></div>
+                    <div class="artist-avatar"><img src="https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?q=80&w=464&auto=format&fit=crop" alt="Artist Avatar"></div>
+                    <div class="artist-info">
+                        <h3>Alchemist</h3>
+                        <p>@alchemist</p>
+                    </div>
+                    <div class="artist-stats">
+                        <div class="stat-item"><strong>1.9M</strong><span>Followers</span></div>
+                        <div class="stat-item"><strong>222</strong><span>Artworks</span></div>
+                    </div>
+                    <button class="btn btn-secondary">Follow</button>
+                </div>
+                <!-- Artist 8 -->
+                <div class="artist-card glassmorphism card-glow">
+                    <div class="artist-banner"><img src="https://images.unsplash.com/photo-1574169208507-84376144848b?q=80&w=880&auto=format&fit=crop" alt="Artist Banner"></div>
+                    <div class="artist-avatar"><img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=387&auto=format&fit=crop" alt="Artist Avatar"></div>
+                    <div class="artist-info">
+                        <h3>Polyform</h3>
+                        <p>@polyform</p>
+                    </div>
+                    <div class="artist-stats">
+                        <div class="stat-item"><strong>455K</strong><span>Followers</span></div>
+                        <div class="stat-item"><strong>150</strong><span>Artworks</span></div>
+                    </div>
+                    <button class="btn btn-secondary">Follow</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

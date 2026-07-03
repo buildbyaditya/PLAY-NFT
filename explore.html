@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore - PLAY NFT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- General Setup & Variables --- */
+        :root {
+            --bg-color: #0c0a1a;
+            --dark-blue-bg: #1a0f3d;
+            --primary-gradient: linear-gradient(90deg, rgba(82,48,168,1) 0%, rgba(162,71,255,1) 100%);
+            --secondary-gradient: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --secondary-bg-color: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a9a5c4;
+            --font-family: 'Poppins', sans-serif;
+            --glass-blur: 15px;
+            --hover-glow-color: rgba(162, 71, 255, 0.6);
+            --input-focus-border: rgba(162, 71, 255, 0.5);
+        }
+
+        /* --- Base Styles --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--bg-color) 0%, var(--dark-blue-bg) 100%);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            min-height: 100vh;
+            line-height: 1.6;
+            padding-top: 80px; /* Add padding to prevent content from hiding behind the fixed navbar */
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 5%;
+            background: rgba(12, 10, 26, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; position: relative; padding-bottom: 5px; transition: color 0.3s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-primary); }
+        .nav-links a .hover-underline { position: absolute; bottom: 0; left: 0; height: 2px; width: 0; background: var(--primary-gradient); transition: width 0.3s ease; }
+        .nav-links a:hover .hover-underline, .nav-links a.active .hover-underline { width: 100%; }
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
+
+        .search-bar { position: relative; display: flex; align-items: center; background: var(--secondary-bg-color); border-radius: 30px; padding: 5px 15px; border: 1px solid var(--border-color); }
+        .search-icon { width: 18px; height: 18px; margin-right: 10px; opacity: 0.6; }
+        .search-bar input { background: transparent; border: none; outline: none; color: var(--text-primary); font-size: 1rem; width: 150px; transition: width 0.3s ease; }
+        .search-bar input::placeholder { color: var(--text-secondary); }
+        .search-bar input:focus { width: 200px; }
+        .gradient-border-glow { position: relative; }
+        .gradient-border-glow::before { content: ''; position: absolute; top: -1px; left: -1px; right: -1px; bottom: -1px; background: var(--primary-gradient); filter: blur(5px); z-index: -1; opacity: 0; transition: opacity 0.3s ease; border-radius: inherit; }
+        .gradient-border-glow:hover::before { opacity: 0.7; }
+
+        /* --- Page Layout --- */
+        .page-wrapper { display: flex; flex-direction: column; align-items: center; min-height: calc(100vh - 80px); padding: 40px 5%; animation: fadeIn 1s ease-out; }
+        .logo { font-size: 1.5rem; font-weight: 700; text-decoration: none; color: var(--text-primary); }
+        
+        /* --- Glassmorphism & Glow Effects --- */
+        .glassmorphism { background: var(--secondary-bg-color); border: 1px solid var(--border-color); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border-radius: 25px; }
+        .card-glow { position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); transition: box-shadow 0.3s ease, transform 0.3s ease; }
+        .card-glow:hover { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); transform: translateY(-5px); }
+
+        /* --- Buttons --- */
+        .btn { padding: 12px 28px; border-radius: 30px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; border: none; outline: none; }
+        .btn:hover { transform: translateY(-3px); }
+        .btn-primary { background: var(--primary-gradient); color: var(--text-primary); }
+        .btn-primary:hover { box-shadow: 0 5px 15px rgba(162,71,255,0.4); }
+
+        /* --- General Animations --- */
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* ========================================= */
+        /* --- STYLES FOR EXPLORE PAGE --- */
+        /* ========================================= */
+        .explore-header { width: 100%; max-width: 1400px; padding: 60px 40px; text-align: center; margin-bottom: 40px; }
+        .explore-header h1 { font-size: 3rem; font-weight: 700; margin-bottom: 10px; }
+        .explore-header p { font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+        .explore-content { width: 100%; max-width: 1400px; }
+        .section-title { font-size: 2.2rem; font-weight: 600; margin-bottom: 30px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        
+        /* --- Slideshow Container --- */
+        .slideshow-container {
+            width: 100%;
+            overflow: hidden;
+            padding: 20px 0;
+            margin-bottom: 60px;
+        }
+
+        .explore-grid {
+            display: flex;
+            width: fit-content; /* Let the width be determined by its content */
+            animation: slideshow 60s linear infinite;
+        }
+
+        .slideshow-container:hover .explore-grid {
+            animation-play-state: paused;
+        }
+        
+        /* --- Card Styles for Slideshow --- */
+        .nft-card {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            width: 300px; /* Fixed width for each card */
+            flex-shrink: 0; /* Prevent cards from shrinking */
+            margin-right: 30px; /* Spacing between cards */
+        }
+
+        .nft-image-container { width: 100%; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
+        .nft-image-container img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; display: block; transition: transform 0.4s ease; }
+        .nft-card:hover .nft-image-container img { transform: scale(1.05); }
+        .nft-info { text-align: left; margin-bottom: 15px; }
+        .nft-info h3 { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); }
+        .nft-info .artist-name { font-size: 0.9rem; color: var(--text-secondary); }
+        .nft-actions { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+        .nft-actions .price { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
+        .btn.btn-secondary { background: var(--secondary-gradient); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 20px; font-size: 0.9rem; }
+        .btn.btn-secondary:hover { background: rgba(255, 255, 255, 0.15); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        
+        /* --- Slideshow Animation --- */
+        @keyframes slideshow {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                /* Move left by the width of the original set of cards + their margins */
+                transform: translateX(-2970px); /* (300px card width + 30px margin) * 9 cards */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">PLAY NFT</a>
+                <nav class="nav-links">
+                    <a href="nft.html">Home<span class="hover-underline"></span></a>
+                    <a href="explore.html">Explore<span class="hover-underline"></span></a>
+                    <a href="market.html">Marketplace<span class="hover-underline"></span></a>
+                    <a href="artist.html">Artists<span class="hover-underline"></span></a>
+                    <a href="news.html">News<span class="hover-underline"></span></a>
+                </nav>
+                <div class="nav-actions">
+                    <div class="search-bar gradient-border-glow">
+                        <img src="search.png" alt="Search Icon" class="search-icon">
+                        <input type="text" placeholder="Search">
+                    </div>
+                    <button class="btn btn-primary gradient-border-glow"><a href="auth.html" style="text-decoration: none; color: white;" >Register</a></button>
+                </div>
+            </div>
+        </header>
+
+    <div class="page-wrapper">
+        <section class="explore-header glassmorphism">
+            <h1>Explore the Marketplace</h1>
+            <p>Discover the latest and greatest digital art from talented creators around the world.</p>
+        </section>
+
+        <main class="explore-content">
+            <h2 class="section-title">🔥 Trending Now</h2>
+            <div class="slideshow-container">
+                <div class="explore-grid">
+                    <!-- Original Cards -->
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="generated-image-44.png" alt="Cosmic Swirl NFT"></div><div class="nft-info"><h3>Cosmic Swirl</h3><p class="artist-name">by @neuroartist</p></div><div class="nft-actions"><span class="price">0.45 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135140.054.png" alt="Metaverse Walker NFT"></div><div class="nft-info"><h3>Metaverse Walker</h3><p class="artist-name">by @render_god</p></div><div class="nft-actions"><span class="price">1.20 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135150.853.png" alt="Crystal Prism NFT"></div><div class="nft-info"><h3>Crystal Prism</h3><p class="artist-name">by @digi_gems</p></div><div class="nft-actions"><span class="price">0.88 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135153.138.png" alt="Cybernetic Dream NFT"></div><div class="nft-info"><h3>Cybernetic Dream</h3><p class="artist-name">by @future_visions</p></div><div class="nft-actions"><span class="price">2.50 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135142.714.png" alt="Abstract Mind NFT"></div><div class="nft-info"><h3>Abstract Mind</h3><p class="artist-name">by @colorflow</p></div><div class="nft-actions"><span class="price">0.75 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135144.497.png" alt="Floating Island NFT"></div><div class="nft-info"><h3>Floating Island</h3><p class="artist-name">by @sky_painter</p></div><div class="nft-actions"><span class="price">1.80 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135146.358.png" alt="Liquid Gold NFT"></div><div class="nft-info"><h3>Liquid Gold</h3><p class="artist-name">by @alchemist</p></div><div class="nft-actions"><span class="price">3.10 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135157.102.png" alt="Geometric Soul NFT"></div><div class="nft-info"><h3>Geometric Soul</h3><p class="artist-name">by @polyform</p></div><div class="nft-actions"><span class="price">0.99 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135138.644.png" alt="The Eye NFT"></div><div class="nft-info"><h3>The Eye</h3><p class="artist-name">by @visionary</p></div><div class="nft-actions"><span class="price">1.55 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    
+                    <!-- Duplicated Cards for seamless loop -->
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="generated-image-44.png" alt="Cosmic Swirl NFT"></div><div class="nft-info"><h3>Cosmic Swirl</h3><p class="artist-name">by @neuroartist</p></div><div class="nft-actions"><span class="price">0.45 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135140.054.png" alt="Metaverse Walker NFT"></div><div class="nft-info"><h3>Metaverse Walker</h3><p class="artist-name">by @render_god</p></div><div class="nft-actions"><span class="price">1.20 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135150.853.png" alt="Crystal Prism NFT"></div><div class="nft-info"><h3>Crystal Prism</h3><p class="artist-name">by @digi_gems</p></div><div class="nft-actions"><span class="price">0.88 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135153.138.png" alt="Cybernetic Dream NFT"></div><div class="nft-info"><h3>Cybernetic Dream</h3><p class="artist-name">by @future_visions</p></div><div class="nft-actions"><span class="price">2.50 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135142.714.png" alt="Abstract Mind NFT"></div><div class="nft-info"><h3>Abstract Mind</h3><p class="artist-name">by @colorflow</p></div><div class="nft-actions"><span class="price">0.75 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135144.497.png" alt="Floating Island NFT"></div><div class="nft-info"><h3>Floating Island</h3><p class="artist-name">by @sky_painter</p></div><div class="nft-actions"><span class="price">1.80 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135146.358.png" alt="Liquid Gold NFT"></div><div class="nft-info"><h3>Liquid Gold</h3><p class="artist-name">by @alchemist</p></div><div class="nft-actions"><span class="price">3.10 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135157.102.png" alt="Geometric Soul NFT"></div><div class="nft-info"><h3>Geometric Soul</h3><p class="artist-name">by @polyform</p></div><div class="nft-actions"><span class="price">0.99 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135138.644.png" alt="The Eye NFT"></div><div class="nft-info"><h3>The Eye</h3><p class="artist-name">by @visionary</p></div><div class="nft-actions"><span class="price">1.55 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                </div>
+            </div>
+
+            <h2 class="section-title">✨ Newest Additions</h2>
+            <div class="slideshow-container">
+                <div class="explore-grid">
+                    <!-- Original Cards -->
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135154.798.png" alt="Neon Grid NFT"></div><div class="nft-info"><h3>Neon Grid</h3><p class="artist-name">by @retro_future</p></div><div class="nft-actions"><span class="price">0.15 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T140722.260.png" alt="GeoForm #7 NFT"></div><div class="nft-info"><h3>GeoForm #7</h3><p class="artist-name">by @shapes</p></div><div class="nft-actions"><span class="price">0.32 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T140741.620.png" alt="Oceanic Bloom NFT"></div><div class="nft-info"><h3>Oceanic Bloom</h3><p class="artist-name">by @fluid_art</p></div><div class="nft-actions"><span class="price">0.60 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135158.704.png" alt="Pixelated Sunset NFT"></div><div class="nft-info"><h3>Pixelated Sunset</h3><p class="artist-name">by @8bit_dreams</p></div><div class="nft-actions"><span class="price">0.22 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135203.590.png" alt="Ethereal Forest NFT"></div><div class="nft-info"><h3>Ethereal Forest</h3><p class="artist-name">by @mystic_woods</p></div><div class="nft-actions"><span class="price">0.40 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135205.444.png" alt="Chrome Sculpture NFT"></div><div class="nft-info"><h3>Chrome Sculpture</h3><p class="artist-name">by @metalhead</p></div><div class="nft-actions"><span class="price">0.95 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135148.560.png" alt="Pastel Dreams NFT"></div><div class="nft-info"><h3>Pastel Dreams</h3><p class="artist-name">by @soft_hues</p></div><div class="nft-actions"><span class="price">0.28 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135153.138.png" alt="Marble Flow NFT"></div><div class="nft-info"><h3>Marble Flow</h3><p class="artist-name">by @inksperiment</p></div><div class="nft-actions"><span class="price">0.50 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135200.475.png" alt="Holographic Orb NFT"></div><div class="nft-info"><h3>Holographic Orb</h3><p class="artist-name">by @iridescent</p></div><div class="nft-actions"><span class="price">0.70 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    
+                    <!-- Duplicated Cards for seamless loop -->
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135154.798.png" alt="Neon Grid NFT"></div><div class="nft-info"><h3>Neon Grid</h3><p class="artist-name">by @retro_future</p></div><div class="nft-actions"><span class="price">0.15 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T140722.260.png" alt="GeoForm #7 NFT"></div><div class="nft-info"><h3>GeoForm #7</h3><p class="artist-name">by @shapes</p></div><div class="nft-actions"><span class="price">0.32 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T140741.620.png" alt="Oceanic Bloom NFT"></div><div class="nft-info"><h3>Oceanic Bloom</h3><p class="artist-name">by @fluid_art</p></div><div class="nft-actions"><span class="price">0.60 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135158.704.png" alt="Pixelated Sunset NFT"></div><div class="nft-info"><h3>Pixelated Sunset</h3><p class="artist-name">by @8bit_dreams</p></div><div class="nft-actions"><span class="price">0.22 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135203.590.png" alt="Ethereal Forest NFT"></div><div class="nft-info"><h3>Ethereal Forest</h3><p class="artist-name">by @mystic_woods</p></div><div class="nft-actions"><span class="price">0.40 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135205.444.png" alt="Chrome Sculpture NFT"></div><div class="nft-info"><h3>Chrome Sculpture</h3><p class="artist-name">by @metalhead</p></div><div class="nft-actions"><span class="price">0.95 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135148.560.png" alt="Pastel Dreams NFT"></div><div class="nft-info"><h3>Pastel Dreams</h3><p class="artist-name">by @soft_hues</p></div><div class="nft-actions"><span class="price">0.28 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135153.138.png" alt="Marble Flow NFT"></div><div class="nft-info"><h3>Marble Flow</h3><p class="artist-name">by @inksperiment</p></div><div class="nft-actions"><span class="price">0.50 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                    <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135200.475.png" alt="Holographic Orb NFT"></div><div class="nft-info"><h3>Holographic Orb</h3><p class="artist-name">by @iridescent</p></div><div class="nft-actions"><span class="price">0.70 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
+

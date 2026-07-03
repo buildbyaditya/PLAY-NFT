@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAY NFT - Register / Login</title>
+    <link rel="stylesheet" href="auth.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="auth-page-wrapper">
+        <header class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">PLAY NFT</a>
+                <nav class="nav-links">
+                    <a href="index.html">Home<span class="hover-underline"></span></a>
+                    <a href="explore.html">Explore<span class="hover-underline"></span></a>
+                    <a href="market.html">Marketplace<span class="hover-underline"></span></a>
+                    <a href="artist.html">Artists<span class="hover-underline"></span></a>
+                    <a href="news.html">News<span class="hover-underline"></span></a>
+                </nav>
+                <div class="nav-actions">
+                    <div class="search-bar gradient-border-glow">
+                        <img src="search.png" alt="Search Icon" class="search-icon">
+                        <input type="text" placeholder="Search">
+                    </div>
+                    <button class="btn btn-primary gradient-border-glow"><a href="auth.html" style="text-decoration: none; color: white;" >Register</a></button>
+                </div>
+            </div>
+        </header>
+
+        <div class="auth-container">
+            <div class="auth-card glassmorphism card-glow">
+                
+                <!-- MOVED RADIO BUTTONS HERE & HIDDEN -->
+                <!-- The CSS selector will now work because these are siblings with .auth-forms -->
+                <input type="radio" id="login-radio" name="auth-mode" class="auth-radio-input">
+                <input type="radio" id="register-radio" name="auth-mode" class="auth-radio-input" checked> <!-- Default to Register -->
+
+                <div class="auth-toggle">
+                    <label for="login-radio" class="toggle-btn">Login</label>
+                    <label for="register-radio" class="toggle-btn">Register</label>
+                    <div class="toggle-indicator"></div>
+                </div>
+
+                <div class="auth-forms">
+                    <form class="login-form auth-form">
+                        <h2>Welcome Back</h2>
+                        <div class="input-group">
+                            <input type="email" id="login-email" required placeholder=" ">
+                            <label for="login-email">Email Address</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="login-password" required placeholder=" ">
+                            <label for="login-password">Password</label>
+                        </div>
+                        <div class="form-options">
+                            <label class="checkbox-container">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                                Remember Me
+                            </label>
+                            <a href="#" class="forgot-password">Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary auth-submit-btn">Login</button>
+                        <div class="or-divider"><span>OR</span></div>
+                        <div class="social-login">
+                            <button class="social-btn"><img src="Google_Symbol_1.png" alt="Google"><span>Continue with Google</span></button>
+                        </div>
+                    </form>
+
+                    <form class="register-form auth-form">
+                        <h2>Join PLAY NFT</h2>
+                        <div class="input-group">
+                            <input type="text" id="register-username" required placeholder=" ">
+                            <label for="register-username">Username</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="email" id="register-email" required placeholder=" ">
+                            <label for="register-email">Email Address</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="register-password" required placeholder=" ">
+                            <label for="register-password">Password</label>
+                        </div>
+                        <label class="checkbox-container terms-checkbox">
+                            <input type="checkbox" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#">Terms & Conditions</a>
+                        </label>
+                        <button type="submit" class="btn btn-primary auth-submit-btn">Register</button>
+                         <div class="or-divider"><span>OR</span></div>
+                        <div class="social-login">
+                           <button class="social-btn"><img src="Google_Symbol_1.png" alt="Google"><span>Continue with Google</span></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+

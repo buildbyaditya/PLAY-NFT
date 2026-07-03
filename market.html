@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - PLAY NFT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- General Setup & Variables --- */
+        :root {
+            --bg-color: #0c0a1a;
+            --dark-blue-bg: #1a0f3d;
+            --primary-gradient: linear-gradient(90deg, rgba(82,48,168,1) 0%, rgba(162,71,255,1) 100%);
+            --secondary-gradient: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --secondary-bg-color: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a9a5c4;
+            --font-family: 'Poppins', sans-serif;
+            --glass-blur: 15px;
+            --hover-glow-color: rgba(162, 71, 255, 0.6);
+            --input-focus-border: rgba(162, 71, 255, 0.5);
+        }
+
+        /* --- Base Styles --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--bg-color) 0%, var(--dark-blue-bg) 100%);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            min-height: 100vh;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            padding-top: 80px;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 5%;
+            background: rgba(12, 10, 26, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; position: relative; padding-bottom: 5px; transition: color 0.3s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-primary); }
+        .nav-links a .hover-underline { position: absolute; bottom: 0; left: 0; height: 2px; width: 0; background: var(--primary-gradient); transition: width 0.3s ease; }
+        .nav-links a:hover .hover-underline, .nav-links a.active .hover-underline { width: 100%; }
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
+
+        .search-bar { position: relative; display: flex; align-items: center; background: var(--secondary-bg-color); border-radius: 30px; padding: 5px 15px; border: 1px solid var(--border-color); }
+        .search-icon { width: 18px; height: 18px; margin-right: 10px; opacity: 0.6; }
+        .search-bar input { background: transparent; border: none; outline: none; color: var(--text-primary); font-size: 1rem; width: 150px; transition: width 0.3s ease; }
+        .search-bar input::placeholder { color: var(--text-secondary); }
+        .search-bar input:focus { width: 200px; }
+        .gradient-border-glow { position: relative; }
+        .gradient-border-glow::before { content: ''; position: absolute; top: -1px; left: -1px; right: -1px; bottom: -1px; background: var(--primary-gradient); filter: blur(5px); z-index: -1; opacity: 0; transition: opacity 0.3s ease; border-radius: inherit; }
+        .gradient-border-glow:hover::before { opacity: 0.7; }
+
+        /* --- Page Layout --- */
+        .page-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; flex-grow: 1; padding: 40px 5%; animation: fadeIn 1s ease-out; }
+        .logo { font-size: 1.5rem; font-weight: 700; text-decoration: none; color: var(--text-primary); }
+        
+        /* --- Glassmorphism & Glow Effects --- */
+        .glassmorphism { background: var(--secondary-bg-color); border: 1px solid var(--border-color); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border-radius: 25px; }
+        .card-glow { position: relative; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); transition: box-shadow 0.3s ease, transform 0.3s ease; }
+        .card-glow:hover { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); transform: translateY(-5px); }
+
+        /* --- Buttons --- */
+        .btn { padding: 12px 28px; border-radius: 30px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; border: none; outline: none; }
+        .btn:hover { transform: translateY(-3px); }
+        .btn-primary { background: var(--primary-gradient); color: var(--text-primary); }
+        .btn-primary:hover { box-shadow: 0 5px 15px rgba(162,71,255,0.4); }
+
+        /* --- General Animations --- */
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* ========================================= */
+        /* --- STYLES FOR MARKETPLACE PAGE --- */
+        /* ========================================= */
+        .marketplace-content { width: 100%; max-width: 1400px; }
+        
+        .filter-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filter-dropdown {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
+        
+        .filter-dropdown:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .filter-dropdown::after {
+            content: '▼';
+            font-size: 0.7rem;
+            margin-left: 10px;
+        }
+
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        /* --- NFT Card --- */
+        .nft-card {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nft-image-container { width: 100%; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
+        .nft-image-container img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; display: block; transition: transform 0.4s ease; }
+        .nft-card:hover .nft-image-container img { transform: scale(1.05); }
+        .nft-info { text-align: left; margin-bottom: 15px; }
+        .nft-info h3 { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); }
+        .nft-info .artist-name { font-size: 0.9rem; color: var(--text-secondary); }
+        .nft-actions { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+        .nft-actions .price { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
+        .btn.btn-secondary { background: var(--secondary-gradient); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 20px; font-size: 0.9rem; }
+        .btn.btn-secondary:hover { background: rgba(255, 255, 255, 0.15); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        /* --- Pagination --- */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .pagination a, .pagination span {
+            text-decoration: none;
+            color: var(--text-secondary);
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background: var(--secondary-bg-color);
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .pagination .active {
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            border-color: transparent;
+        }
+
+        .pagination .disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* --- Footer Styles --- */
+        .site-footer {
+            width: 100%;
+            background: var(--secondary-bg-color);
+            border-top: 1px solid var(--border-color);
+            padding: 60px 5%;
+        }
+        
+        .footer-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 2fr;
+            gap: 40px;
+        }
+        
+        .footer-about .logo { margin-bottom: 15px; display: inline-block; }
+        .footer-about p { color: var(--text-secondary); max-width: 300px; }
+        .footer-links h4 { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; }
+        .footer-links ul { list-style: none; }
+        .footer-links ul li a { color: var(--text-secondary); text-decoration: none; display: block; margin-bottom: 10px; transition: color 0.3s ease; }
+        .footer-links ul li a:hover { color: var(--text-primary); }
+        .footer-newsletter h4 { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; }
+        .newsletter-form { display: flex; }
+        .newsletter-form input { flex-grow: 1; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color); border-radius: 30px 0 0 30px; padding: 12px 15px; color: var(--text-primary); outline: none; }
+        .newsletter-form button { border-radius: 0 30px 30px 0; padding: 12px 20px; }
+        
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 40px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-secondary);
+        }
+
+        .social-icons { display: flex; gap: 15px; }
+        .social-icons a { color: var(--text-secondary); font-size: 1.2rem; text-decoration: none; transition: color 0.3s ease, transform 0.3s ease; }
+        .social-icons a:hover { color: var(--text-primary); transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">PLAY NFT</a>
+            <nav class="nav-links">
+                <a href="nft.html">Home<span class="hover-underline"></span></a>
+                <a href="explore.html">Explore<span class="hover-underline"></span></a>
+                <a href="market.html" class="active">Marketplace<span class="hover-underline"></span></a>
+                <a href="artist.html">Artists<span class="hover-underline"></span></a>
+                <a href="news.html">News<span class="hover-underline"></span></a>
+            </nav>
+            <div class="nav-actions">
+                <div class="search-bar gradient-border-glow">
+                    <img src="search.png" alt="Search Icon" class="search-icon">
+                    <input type="text" placeholder="Search">
+                </div>
+                <button class="btn btn-primary gradient-border-glow"><a href="auth.html" style="text-decoration: none; color: white;" >Register</a></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-wrapper">
+        <main class="marketplace-content">
+            <section class="filter-toolbar glassmorphism">
+                <div class="filter-group">
+                    <div class="filter-dropdown">All Categories</div>
+                    <div class="filter-dropdown">All Items</div>
+                </div>
+                <div class="filter-group">
+                    <div class="filter-dropdown">Recently Listed</div>
+                    <button class="btn btn-secondary">Filters</button>
+                </div>
+            </section>
+
+            <section class="marketplace-grid">
+                <!-- Row 1 -->
+                <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135157.102.png" alt="Cosmic Swirl NFT"></div><div class="nft-info"><h3>Cosmic Swirl</h3><p class="artist-name">by @neuroartist</p></div><div class="nft-actions"><span class="price">0.45 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135140.054.png" alt="Metaverse Walker NFT"></div><div class="nft-info"><h3>Metaverse Walker</h3><p class="artist-name">by @render_god</p></div><div class="nft-actions"><span class="price">1.20 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135150.853.png" alt="Crystal Prism NFT"></div><div class="nft-info"><h3>Crystal Prism</h3><p class="artist-name">by @digi_gems</p></div><div class="nft-actions"><span class="price">0.88 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="generated-image-45.png" alt="Cybernetic Dream NFT"></div><div class="nft-info"><h3>Cybernetic Dream</h3><p class="artist-name">by @future_visions</p></div><div class="nft-actions"><span class="price">2.50 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                
+                <!-- Row 2 -->
+                <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135154.798.png" alt="Neon Grid NFT"></div><div class="nft-info"><h3>Neon Grid</h3><p class="artist-name">by @retro_future</p></div><div class="nft-actions"><span class="price">0.15 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T140741.620.png" alt="GeoForm #7 NFT"></div><div class="nft-info"><h3>GeoForm #7</h3><p class="artist-name">by @shapes</p></div><div class="nft-actions"><span class="price">0.32 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="img/generated-image - 2025-09-29T142041.466.png" alt="Oceanic Bloom NFT"></div><div class="nft-info"><h3>Oceanic Bloom</h3><p class="artist-name">by @fluid_art</p></div><div class="nft-actions"><span class="price">0.60 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135158.704.png" alt="Pixelated Sunset NFT"></div><div class="nft-info"><h3>Pixelated Sunset</h3><p class="artist-name">by @8bit_dreams</p></div><div class="nft-actions"><span class="price">0.22 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+
+                <!-- Row 3 -->
+                <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135142.714.png" alt="Abstract Mind NFT"></div><div class="nft-info"><h3>Abstract Mind</h3><p class="artist-name">by @colorflow</p></div><div class="nft-actions"><span class="price">0.75 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135144.497.png" alt="Floating Island NFT"></div><div class="nft-info"><h3>Floating Island</h3><p class="artist-name">by @sky_painter</p></div><div class="nft-actions"><span class="price">1.80 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T135146.358.png" alt="Liquid Gold NFT"></div><div class="nft-info"><h3>Liquid Gold</h3><p class="artist-name">by @alchemist</p></div><div class="nft-actions"><span class="price">3.10 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+                <div class="nft-card glassmorphism card-glow"> <div class="nft-image-container"><img src="image box/generated-image - 2025-09-29T140722.260.png" alt="Geometric Soul NFT"></div><div class="nft-info"><h3>Geometric Soul</h3><p class="artist-name">by @polyform</p></div><div class="nft-actions"><span class="price">0.99 ETH</span><button class="btn btn-secondary">Place Bid</button></div></div>
+            </section>
+
+            <nav class="pagination">
+                <a href="#" class="disabled">&laquo; Prev</a>
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <span>...</span>
+                <a href="#">12</a>
+                <a href="#">Next &raquo;</a>
+            </nav>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-about">
+                <a href="#" class="logo">PLAY NFT</a>
+                <p>The world's leading digital marketplace for crypto collectibles and non-fungible tokens (NFTs).</p>
+            </div>
+            <div class="footer-links">
+                <h4>Marketplace</h4>
+                <ul>
+                    <li><a href="#">Explore</a></li>
+                    <li><a href="#">Artists</a></li>
+                    <li><a href="#">Collections</a></li>
+                    <li><a href="#">Stats</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Partners</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-newsletter">
+                <h4>Join our Newsletter</h4>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your email address">
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 PLAY NFT, Inc. All Rights Reserved.</p>
+            <div class="social-icons">
+                 <a href="#" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
+                 <a href="#" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                 <a href="#" title="Discord"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19.54 0c1.356 0 2.46 1.104 2.46 2.472v21.528l-2.58-2.28-1.452-1.344-1.536-1.428.636 2.22h-13.608c-1.356 0-2.46-1.104-2.46-2.472v-16.224c0-1.368 1.104-2.472 2.46-2.472h16.08zm-4.632 15.672c2.652-.084 3.672-1.824 3.672-1.824 0-3.864-1.728-6.996-1.728-6.996-1.728-1.296-3.372-1.26-3.372-1.26l-.168.192c2.4.384 3.156 1.56 3.156 1.56s-1.128-.54-2.52-.816c-1.416-.288-2.952-.84-2.952-.84s-.396.996-.948 2.16c-1.836-1.2-3.324-2.016-3.324-2.016s-.108 1.692.024 3.336c.096.96.264 2.232.264 2.232s2.112.576 3.744.924c1.32.288 2.448.516 2.448.516s-.444 1.212-1.524 1.716c-1.116.516-2.532.744-2.532.744s.312.42.66.756c1.236 1.152 2.94 1.224 2.94 1.224zm-2.856-4.992c-.816 0-1.488-.9-1.488-2.004 0-1.116.672-2.004 1.488-2.004.816 0 1.488.888 1.488 2.004 0 1.104-.672 2.004-1.488 2.004zm3.324 0c-.816 0-1.488-.9-1.488-2.004 0-1.116.672-2.004 1.488-2.004.816 0 1.488.888 1.488 2.004 0 1.104-.672 2.004-1.488 2.004z"/></svg></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
+
